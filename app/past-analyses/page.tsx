@@ -184,46 +184,82 @@ export default function PastAnalysesPage() {
                   key="grid"
                   className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
                 >
-                  {filtered.map((analysis) => (
-                    <StaggerItem key={analysis.id}>
+                  {filtered.map((analysis, idx) => (
+                    <StaggerItem key={analysis.id} delay={idx * 0.05}>
                       <Link href={`/results/${analysis.id}`}>
-                        <GlassCard className="flex h-full flex-col gap-3 transition-all hover:border-primary/30">
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="flex-1 min-w-0">
-                              <h3 className="truncate text-base font-semibold text-foreground">
-                                {analysis.companyName}
-                              </h3>
-                              <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                                <Globe className="h-3 w-3" />
-                                {analysis.domain}
-                              </p>
-                            </div>
-                            <VerdictBadge
-                              verdict={analysis.verdict}
-                              size="sm"
-                              animate={false}
+                        <motion.div
+                          whileHover={{ y: -8, scale: 1.02 }}
+                          transition={{ type: "spring", bounce: 0.4 }}
+                          className="h-full"
+                        >
+                          <GlassCard className="tilt-card flex h-full flex-col gap-3 transition-all hover:border-primary/30 group relative overflow-hidden">
+                            {/* Animated gradient on hover */}
+                            <motion.div
+                              className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 -z-10"
+                              style={{
+                                background: "linear-gradient(135deg, #6366f1, transparent)"
+                              }}
                             />
-                          </div>
-                          <p className="text-xs text-muted-foreground line-clamp-2">
-                            {analysis.summary}
-                          </p>
-                          <div className="mt-auto flex items-center justify-between pt-2 border-t border-border/50">
-                            <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                              <Calendar className="h-3 w-3" />
-                              {new Date(analysis.date).toLocaleDateString(
-                                "en-US",
-                                {
-                                  month: "short",
-                                  day: "numeric",
-                                  year: "numeric",
-                                }
-                              )}
-                            </span>
-                            <span className="text-xs font-medium text-primary">
-                              {analysis.confidenceScore}% confidence
-                            </span>
-                          </div>
-                        </GlassCard>
+                            
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="flex-1 min-w-0">
+                                <motion.h3 
+                                  className="truncate text-base font-semibold text-foreground group-hover:text-gradient-cyber transition-colors"
+                                  whileHover={{ scale: 1.02 }}
+                                >
+                                  {analysis.companyName}
+                                </motion.h3>
+                                <motion.p 
+                                  className="flex items-center gap-1.5 text-xs text-muted-foreground group-hover:text-foreground transition-colors"
+                                  whileHover={{ x: 2 }}
+                                >
+                                  <Globe className="h-3 w-3" />
+                                  {analysis.domain}
+                                </motion.p>
+                              </div>
+                              <motion.div
+                                whileHover={{ scale: 1.1 }}
+                                transition={{ type: "spring", bounce: 0.5 }}
+                              >
+                                <VerdictBadge
+                                  verdict={analysis.verdict}
+                                  size="sm"
+                                  animate={false}
+                                />
+                              </motion.div>
+                            </div>
+                            <p className="text-xs text-muted-foreground line-clamp-2 group-hover:text-foreground/70 transition-colors">
+                              {analysis.summary}
+                            </p>
+                            <motion.div 
+                              className="mt-auto flex items-center justify-between pt-2 border-t border-border/50"
+                              initial={{ scaleX: 0 }}
+                              whileInView={{ scaleX: 1 }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.6 }}
+                              style={{ transformOrigin: "left" }}
+                            >
+                              <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                                <Calendar className="h-3 w-3" />
+                                {new Date(analysis.date).toLocaleDateString(
+                                  "en-US",
+                                  {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric",
+                                  }
+                                )}
+                              </span>
+                              <motion.span 
+                                className="text-xs font-medium text-primary"
+                                animate={{ opacity: [0.6, 1, 0.6] }}
+                                transition={{ duration: 2, repeat: Infinity, delay: idx * 0.1 }}
+                              >
+                                {analysis.confidenceScore}% confidence
+                              </motion.span>
+                            </motion.div>
+                          </GlassCard>
+                        </motion.div>
                       </Link>
                     </StaggerItem>
                   ))}

@@ -42,7 +42,7 @@ function AgentFlowNode({
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1, duration: 0.5 }}
-      className="flex items-start gap-4"
+      className="flex items-start gap-4 group p-4 rounded-lg hover:bg-muted/30 transition-colors"
     >
       <div className="flex flex-col items-center">
         <motion.div
@@ -59,18 +59,28 @@ function AgentFlowNode({
           }
           transition={{ duration: 2, repeat: Infinity }}
           className="rounded-xl"
+          whileHover={{ scale: 1.1 }}
         >
           <AgentIcon icon={agent.icon} color={agent.color} size="lg" />
         </motion.div>
         {index < agents.length - 1 && (
-          <div className="my-2 h-8 w-px bg-border" />
+          <motion.div 
+            className="my-2 h-8 w-px bg-gradient-to-b from-border to-transparent"
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true }}
+            style={{ transformOrigin: "top" }}
+          />
         )}
       </div>
       <div className="flex-1 pb-4">
-        <h3 className="mb-1 text-lg font-semibold text-foreground">
+        <motion.h3 
+          className="mb-1 text-lg font-semibold text-foreground group-hover:text-gradient-cyber transition-colors"
+          whileHover={{ x: 4 }}
+        >
           {agent.name}
-        </h3>
-        <p className="text-sm leading-relaxed text-muted-foreground">
+        </motion.h3>
+        <p className="text-sm leading-relaxed text-muted-foreground group-hover:text-foreground/70 transition-colors">
           {agent.description}
         </p>
         {isActive && (
@@ -89,25 +99,46 @@ function AgentFlowNode({
 function RejectFirstVisual() {
   return (
     <FadeIn>
-      <GlassCard hover={false} className="max-w-2xl mx-auto">
-        <h3 className="mb-6 text-center text-xl font-bold text-foreground">
-          Reject-First Decision Logic
-        </h3>
-        <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-8">
+      <GlassCard hover={false} className="max-w-2xl mx-auto relative overflow-hidden group">
+        <motion.div
+          className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300"
+          style={{
+            background: "linear-gradient(135deg, #f59e0b, transparent)"
+          }}
+        />
+        <motion.h3 
+          className="mb-8 text-center text-2xl font-bold text-foreground"
+          initial={{ opacity: 0, y: -10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          Reject-First <span className="text-gradient-cyber">Decision Logic</span>
+        </motion.h3>
+        <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-6">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="flex flex-col items-center gap-2"
+            whileHover={{ scale: 1.1, y: -4 }}
+            className="flex flex-col items-center gap-2 group/item"
           >
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-warning/10 border border-warning/20">
+            <motion.div 
+              className="flex h-16 w-16 items-center justify-center rounded-2xl bg-warning/10 border border-warning/20 group-hover/item:border-warning/40 group-hover/item:bg-warning/15 transition-colors relative"
+              whileHover={{ rotate: 5 }}
+            >
               <XCircle className="h-8 w-8 text-warning" />
-            </div>
+              <motion.div
+                className="absolute inset-0 rounded-2xl"
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 0.2 }}
+                style={{ background: "radial-gradient(circle, #f97066, transparent)" }}
+              />
+            </motion.div>
             <span className="text-xs font-semibold text-warning">
               Risk Agent
             </span>
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-muted-foreground group-hover/item:text-foreground transition-colors">
               Argues Against
             </span>
           </motion.div>
@@ -117,9 +148,15 @@ function RejectFirstVisual() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
+            className="group/arrow"
           >
-            <ArrowRight className="h-5 w-5 text-muted-foreground hidden sm:block" />
-            <ArrowDown className="h-5 w-5 text-muted-foreground sm:hidden" />
+            <motion.div
+              animate={{ x: [0, 4, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              <ArrowRight className="h-5 w-5 text-muted-foreground hidden sm:block group-hover/arrow:text-gradient-cyber transition-colors" />
+              <ArrowDown className="h-5 w-5 text-muted-foreground sm:hidden group-hover/arrow:text-gradient-cyber transition-colors" />
+            </motion.div>
           </motion.div>
 
           <motion.div
@@ -127,15 +164,25 @@ function RejectFirstVisual() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="flex flex-col items-center gap-2"
+            whileHover={{ scale: 1.1, y: -4 }}
+            className="flex flex-col items-center gap-2 group/item"
           >
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-chart-3/10 border border-chart-3/20">
+            <motion.div 
+              className="flex h-16 w-16 items-center justify-center rounded-2xl bg-chart-3/10 border border-chart-3/20 group-hover/item:border-chart-3/40 group-hover/item:bg-chart-3/15 transition-colors relative"
+              whileHover={{ rotate: -5 }}
+            >
               <AlertTriangle className="h-8 w-8 text-chart-3" />
-            </div>
+              <motion.div
+                className="absolute inset-0 rounded-2xl"
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 0.2 }}
+                style={{ background: "radial-gradient(circle, #fbbf24, transparent)" }}
+              />
+            </motion.div>
             <span className="text-xs font-semibold text-chart-3">
               Decision Arbiter
             </span>
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-muted-foreground group-hover/item:text-foreground transition-colors">
               Weighs Objections
             </span>
           </motion.div>
@@ -145,9 +192,15 @@ function RejectFirstVisual() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.6 }}
+            className="group/arrow"
           >
-            <ArrowRight className="h-5 w-5 text-muted-foreground hidden sm:block" />
-            <ArrowDown className="h-5 w-5 text-muted-foreground sm:hidden" />
+            <motion.div
+              animate={{ x: [0, 4, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, delay: 0.3 }}
+            >
+              <ArrowRight className="h-5 w-5 text-muted-foreground hidden sm:block group-hover/arrow:text-gradient-cyber transition-colors" />
+              <ArrowDown className="h-5 w-5 text-muted-foreground sm:hidden group-hover/arrow:text-gradient-cyber transition-colors" />
+            </motion.div>
           </motion.div>
 
           <motion.div
@@ -155,15 +208,25 @@ function RejectFirstVisual() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.7 }}
-            className="flex flex-col items-center gap-2"
+            whileHover={{ scale: 1.1, y: -4 }}
+            className="flex flex-col items-center gap-2 group/item"
           >
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-success/10 border border-success/20">
+            <motion.div 
+              className="flex h-16 w-16 items-center justify-center rounded-2xl bg-success/10 border border-success/20 group-hover/item:border-success/40 group-hover/item:bg-success/15 transition-colors relative"
+              whileHover={{ rotate: 5 }}
+            >
               <CheckCircle2 className="h-8 w-8 text-success" />
-            </div>
+              <motion.div
+                className="absolute inset-0 rounded-2xl"
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 0.2 }}
+                style={{ background: "radial-gradient(circle, #14b8a6, transparent)" }}
+              />
+            </motion.div>
             <span className="text-xs font-semibold text-success">
               Approved
             </span>
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-muted-foreground group-hover/item:text-foreground transition-colors">
               Only If Justified
             </span>
           </motion.div>
